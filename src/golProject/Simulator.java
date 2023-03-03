@@ -120,6 +120,11 @@ public class Simulator {
 		System.out.println(newGridInString);
 
 		String[] splitString = newGridInString.split("#");
+		
+		if(splitString.length > sizeRowsMatrix) {
+			System.out.println("A matriz é inválida, não se encaixa no grid!");
+			return;
+		}
 
 		List<List<Cell>> matrixBasedOfString = new ArrayList<>();
 
@@ -127,6 +132,13 @@ public class Simulator {
 
 			List<Cell> lineBasedOfString = new ArrayList<>();
 			String[] col = row.split("");
+			
+			if(col.length > sizeColsMatrix) {
+				System.out.println("A matriz é inválida, não se encaixa no grid!");
+				return;
+			}
+
+			
 			for (String c : col) {
 				if (c.equals("1")) {
 					lineBasedOfString.add(new Cell(true));

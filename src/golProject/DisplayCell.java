@@ -13,7 +13,7 @@ public class DisplayCell {
 	public DisplayCell(List<List<Cell>> matrixCells,int lengthRows, int lengthCols) {
 		List<List<Cell>> newMatrixFull = new ArrayList<>();
 		
-		if(matrixCells.size() < lengthRows) {
+		if(matrixCells.size() < lengthRows || matrixCells.get(0).size() < lengthCols) {
 
 			for(int r = 0; r < lengthRows; r++) {
 				List<Cell> line = new ArrayList<Cell>();
