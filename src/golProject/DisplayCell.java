@@ -10,7 +10,7 @@ public class DisplayCell {
 	private int lengthCols;
 	private int lengthRows;
 	
-	public DisplayCell(List<List<Cell>> matrixCells, int lengthCols,int lengthRows) {
+	public DisplayCell(List<List<Cell>> matrixCells,int lengthRows, int lengthCols) {
 		List<List<Cell>> newMatrixFull = new ArrayList<>();
 		
 		if(matrixCells.size() < lengthRows) {

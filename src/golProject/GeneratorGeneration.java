@@ -18,8 +18,9 @@ public class GeneratorGeneration {
 
 	public int countNeighbors(int x, int y) {
 		int neighbors = 0;
-		int largura = this.currentGeneration.get(0).size();
-		int altura = this.currentGeneration.size();
+		int largura = this.currentGeneration.size();
+		int altura = this.currentGeneration.get(0).size();
+		
 
 		// loop através das posições vizinhas
 		for (int i = -1; i <= 1; i++) {

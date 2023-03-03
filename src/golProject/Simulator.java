@@ -1,5 +1,9 @@
 package golProject;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
@@ -8,6 +12,7 @@ import java.util.List;
 import java.util.Random;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class Simulator {
 
@@ -27,7 +32,6 @@ public class Simulator {
 	}
 
 	public static void main(String[] args) throws IOException {
-		
 
 		int width = -1;
 		int height = -1;
@@ -85,12 +89,11 @@ public class Simulator {
 			System.out.println("Medida s inválida");
 			return;
 		}
+	
+		JFrame frame = new JFrame("GOL por Tauã Ferreira");
 		boolean infinite = false;
-		if(generations == 0) {
-			infinite  = true; 
-			JFrame frame = new JFrame();
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			frame.setVisible(true);
+		if (generations == 0) {
+			infinite = true;
 
 			frame.addKeyListener(new KeyListener() {
 				@Override
@@ -108,11 +111,11 @@ public class Simulator {
 			});
 		}
 
-		int sizeRowsMatrix = width;
-		int sizeColsMatrix = height;
+		int sizeRowsMatrix = height;
+		int sizeColsMatrix = width;
 
 		int numberOfGenerations = generations;
-		String newGridInString = pattern.equals("rnd") ? createRandomGrid(width, height) : pattern;
+		String newGridInString = pattern.equals("rnd") ? createRandomGrid(sizeRowsMatrix , sizeColsMatrix) : pattern;
 
 		System.out.println(newGridInString);
 
@@ -160,12 +163,53 @@ public class Simulator {
 
 		DisplayCell displaygame = new DisplayCell(matrixBasedOfString, sizeRowsMatrix, sizeColsMatrix);
 
-		System.out.println("Geração inicial");
 		displaygame.printDisplay();
 
 		int count = 0;
+		List<List<Cell>> generationZero = displaygame.getMatrix();
 		
-		while(count < numberOfGenerations || infinite) {
+		
+		
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int maxSize = Math.min(screenSize.width, screenSize.height) - 100;
+		int squareSize = Math.min(maxSize / generationZero.size(), maxSize /  generationZero.get(0).size());
+		int panelWidth = squareSize * generationZero.get(0).size();
+        int panelHeight = squareSize * generationZero.size();
+
+		JPanel panel = new JPanel(new GridLayout(generationZero.size(), generationZero.get(0).size(), 1, 1));
+		panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+
+
+		for (int i = 0; i < generationZero.size(); i++) {
+			for (int j = 0; j < generationZero.get(0).size(); j++) {
+				JPanel cell = new JPanel();
+				cell.setPreferredSize(new Dimension(squareSize, squareSize));
+
+				if (generationZero.get(i).get(j).getIsAlive()) {
+					cell.setBackground(Color.YELLOW);
+				} else {
+					cell.setBackground(Color.GRAY);
+				}
+
+				panel.add(cell);
+			}
+		}
+		
+		frame.getContentPane().add(panel);
+		frame.pack();
+		frame.setVisible(true);
+		
+		
+
+		frame.setTitle("GOL por Tauã Ferreira | Matriz " + sizeColsMatrix +"x"+ sizeRowsMatrix +" | Geração: " + count);
+		try {
+			Thread.sleep(sleepTime);
+		} catch (InterruptedException e) {
+		}
+		count++;
+		
+		while (count <= numberOfGenerations || infinite) {
 
 			GeneratorGeneration gerador = new GeneratorGeneration(displaygame.getMatrix());
 			gerador.addRule(rule1);
@@ -180,17 +224,44 @@ public class Simulator {
 			gerador.addRule(rule10);
 			List<List<Cell>> nextGeneration = gerador.nextGeneration();
 			displaygame.setMatrix(nextGeneration);
-			System.out.println("\nGeneration " + (count + 1) + "");
+			System.out.println("\nGeneration " + (count) + "");
 			displaygame.printDisplay();
+			
+			JPanel newpanel = new JPanel(new GridLayout(generationZero.size(), generationZero.get(0).size(), 1, 1));
+			newpanel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+			
+			for (int i = 0; i < nextGeneration.size(); i++) {
+				for (int j = 0; j < nextGeneration.get(0).size(); j++) {
+					JPanel cell = new JPanel();
+
+					cell.setPreferredSize(new Dimension(squareSize, squareSize));
+					if (nextGeneration.get(i).get(j).getIsAlive()) {
+						cell.setBackground(Color.YELLOW);
+					} else {
+						cell.setBackground(Color.GRAY);
+					}
+
+					newpanel.add(cell);
+				}
+			}
+
+			frame.getContentPane().add(newpanel);
+			frame.pack();
+			frame.setVisible(true);
+
+			frame.setTitle("GOL por Tauã Ferreira | Matriz " + sizeColsMatrix + "x"+ sizeRowsMatrix + " | Geração: " + count);
+
+			newpanel.revalidate();
+			newpanel.repaint();
 
 			try {
 				Thread.sleep(sleepTime);
 			} catch (InterruptedException e) {
 			}
-			
+
 			count++;
 		}
-		
+
 		System.out.println("Programa GOL finalizado");
 
 	}
