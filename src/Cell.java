@@ -1,5 +1,3 @@
-package golProject;
-
 public class Cell {
 	private boolean isAlive = false;
 

@@ -1,5 +1,3 @@
-package golProject;
-
 public class Rule {
 
 	int numberOfNeighborsToApplyRule;

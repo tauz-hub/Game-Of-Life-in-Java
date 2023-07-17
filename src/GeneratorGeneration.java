@@ -1,5 +1,3 @@
-package golProject;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,14 +18,10 @@ public class GeneratorGeneration {
 		int neighbors = 0;
 		int largura = this.currentGeneration.size();
 		int altura = this.currentGeneration.get(0).size();
-		
 
-		// loop através das posições vizinhas
 		for (int i = -1; i <= 1; i++) {
 			for (int j = -1; j <= 1; j++) {
-				// verifica se a posição vizinha existe e não é a mesma que a posição atual
 				if (x + i >= 0 && x + i < largura && y + j >= 0 && y + j < altura && (i != 0 || j != 0)) {
-					// verifica se a posição vizinha está ativa (verde)
 					if (this.currentGeneration.get(x + i).get(y + j).getIsAlive() == true) {
 						neighbors++;
 
@@ -77,8 +71,6 @@ public class GeneratorGeneration {
 		}
 		return nextGeneration;
 	}
-
-	
 
 	public void addRule(Rule rule) {
 		this.rules.add(rule);
